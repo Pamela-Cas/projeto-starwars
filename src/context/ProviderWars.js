@@ -1,7 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ContextWars from './ContextWars';
 
-function ProviderWars() {
+function ProviderWars({ children }) {
   return (
     <ContextWars.Provider>
       {children}
@@ -9,6 +10,8 @@ function ProviderWars() {
   );
 }
 
-
+ProviderWars.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
 export default ProviderWars;
