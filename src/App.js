@@ -1,9 +1,12 @@
 import React from 'react';
 import './App.css';
+import ProviderWars from './context/ProviderWars';
 
 function App() {
   return (
-    <span>Hello, App!</span>
+    <ProviderWars>
+      <span>Hello, App!</span>
+    </ProviderWars>
   );
 }
 
