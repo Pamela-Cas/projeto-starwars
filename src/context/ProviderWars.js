@@ -1,21 +1,28 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import ContextWars from './ContextWars';
 
 function ProviderWars({ children }) {
+  const [data, setData] = useState([]);
+
   useEffect(() => {
     const getApiPlanets = async () => {
       const response = await fetch('https://swapi-trybe.herokuapp.com/api/planets/');
-      const data = await response.json();
-      const dataResults = data.results;
-      console.log(dataResults);
-      return dataResults;
+      const dataPlanet = await response.json();
+      const dataPlanetResults = dataPlanet.results;
+      dataPlanetResults.filter((element) => delete element.residents);
+      setData(dataPlanetResults);
+      console.log(dataPlanetResults);
+      return dataPlanetResults;
     };
     getApiPlanets();
   }, []);
+  const apiPlanets = {
+    data,
+  };
 
   return (
-    <ContextWars.Provider>
+    <ContextWars.Provider value={ apiPlanets }>
       {children}
     </ContextWars.Provider>
   );
