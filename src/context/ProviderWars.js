@@ -11,18 +11,18 @@ function ProviderWars({ children }) {
       const dataPlanet = await response.json();
       const dataPlanetResults = dataPlanet.results;
       dataPlanetResults.filter((element) => delete element.residents);
-      setData(dataPlanetResults);
       console.log(dataPlanetResults);
-      return dataPlanetResults;
+      setData(dataPlanetResults);
     };
     getApiPlanets();
   }, []);
-  const apiPlanets = {
+
+  const dataPlanet = {
     data,
   };
 
   return (
-    <ContextWars.Provider value={ apiPlanets }>
+    <ContextWars.Provider value={ dataPlanet }>
       {children}
     </ContextWars.Provider>
   );
