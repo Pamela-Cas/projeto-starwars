@@ -4,6 +4,7 @@ import ContextWars from './ContextWars';
 
 function ProviderWars({ children }) {
   const [data, setData] = useState([]);
+  const [busca, setBusca] = useState('');
 
   useEffect(() => {
     const getApiPlanets = async () => {
@@ -11,7 +12,7 @@ function ProviderWars({ children }) {
       const dataPlanet = await response.json();
       const dataPlanetResults = dataPlanet.results;
       dataPlanetResults.filter((element) => delete element.residents);
-      console.log(dataPlanetResults);
+      // console.log(dataPlanetResults);
       setData(dataPlanetResults);
     };
     getApiPlanets();
@@ -19,6 +20,13 @@ function ProviderWars({ children }) {
 
   const dataPlanet = {
     data,
+    busca,
+    setBusca,
+
+    filterByName: {
+      name: busca,
+    },
+
   };
 
   return (
