@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import ContextWars from '../context/ContextWars';
 
 function TablePlanet() {
-  const { data, busca } = useContext(ContextWars);
+  const { dataFiltered, busca } = useContext(ContextWars);
 
   return (
     <table>
@@ -24,7 +24,7 @@ function TablePlanet() {
         </tr>
       </thead>
       <tbody>
-        { data.filter((planet) => planet.name.includes(busca))
+        { dataFiltered.filter((planet) => planet.name.includes(busca))
           .map((planet, index) => (
             <tr key={ index }>
               <td>{planet.name}</td>

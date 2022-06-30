@@ -3,7 +3,7 @@ import ContextWars from '../context/ContextWars';
 
 function SearchPlanets() {
   const { busca, setBusca } = useContext(ContextWars);
-  console.log(busca);
+  // console.log(busca);
 
   return (
     <div>
