@@ -8,6 +8,7 @@ function ProviderWars({ children }) {
   const [busca, setBusca] = useState('');
   const [arrTypeFilter, setArrTypeFilter] = useState('population');
   const [operator, setOperator] = useState('maior que');
+  const [xab, setXab] = useState([]);
   const [value, setValue] = useState(0);
 
   useEffect(() => {
@@ -23,18 +24,28 @@ function ProviderWars({ children }) {
   }, []);
 
   const handleSearch = () => {
-    setDataFiltered(data);
-    const results = data.filter((element) => {
-      if (operator === 'igual a') {
-        return parseInt(element[arrTypeFilter], 10) === parseInt(value, 10);
-      }
-      if (operator === 'maior que') {
-        return parseInt(element[arrTypeFilter], 10) > parseInt(value, 10);
-      }
-      return parseInt(element[arrTypeFilter], 10) < parseInt(value, 10);
+    const arrXab = {
+      arrTypeFilter,
+      operator,
+      value,
+    };
+    const auxXab = [arrXab, ...xab];
+    setXab(auxXab);
+    let newArr = [];
+    auxXab.forEach((item) => {
+      const results = data.filter((element) => {
+        if (item.operator === 'igual a') {
+          return parseInt(element[item.arrTypeFilter], 10) === parseInt(item.value, 10);
+        }
+        if (item.operator === 'maior que') {
+          return parseInt(element[item.arrTypeFilter], 10) > parseInt(item.value, 10);
+        }
+        return parseInt(element[item.arrTypeFilter], 10) < parseInt(item.value, 10);
+      });
+      newArr = results;
     });
-    console.log(results);
     setDataFiltered(results);
+    setXab(newArr);
   };
 
   const dataPlanet = {
