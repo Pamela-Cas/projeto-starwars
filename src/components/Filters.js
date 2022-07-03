@@ -14,10 +14,13 @@ export default function Filters() {
   const [operator, setOperator] = useState('maior que');
   const [value, setValue] = useState(0);
   const [filters, setFilters] = useState([]);
+  const [columnSort, setColumnSort] = useState(fieldTypesDefault[0]);
+  const [columnSortType, setColumnSortType] = useState('ASC');
 
   const { handleSearch,
     handleRemoveAllFilters,
-    handleRemoveOnlyFilter } = useContext(ContextWars);
+    handleRemoveOnlyFilter,
+    handleOrder } = useContext(ContextWars);
   useEffect(() => {
     setFieldType(fieldTypes[0]);
   }, [fieldTypes]);
@@ -44,6 +47,10 @@ export default function Filters() {
     setFieldTypes([...fieldTypes, filter.fieldType]);
     setFilters(newFilters);
     handleRemoveOnlyFilter(filter);
+  };
+
+  const handleSetColumnOrder = () => {
+    handleOrder({ column: columnSort, sort: columnSortType });
   };
 
   return (
@@ -93,6 +100,47 @@ export default function Filters() {
           Remover Filtros
         </button>
       </form>
+      <form>
+        <label htmlFor="column-filter">
+          Coluna
+          <select
+            data-testid="column-sort"
+            value={ columnSort }
+            onChange={ ({ target }) => setColumnSort(target.value) }
+          >
+            {fieldTypesDefault.map((field, key) => <option key={ key }>{field}</option>)}
+          </select>
+        </label>
+        <label htmlFor="column-sort">
+          <input
+            type="radio"
+            name="column-sort"
+            data-testid="column-sort-input-asc"
+            value="ASC"
+            onClick={ ({ target }) => setColumnSortType(target.value) }
+            checked
+          />
+          ascendente
+        </label>
+        <label htmlFor="column-sort">
+          <input
+            type="radio"
+            name="column-sort"
+            data-testid="column-sort-input-desc"
+            value="DESC"
+            onClick={ ({ target }) => setColumnSortType(target.value) }
+          />
+          descendente
+        </label>
+        <button
+          type="button"
+          data-testid="column-sort-button"
+          onClick={ handleSetColumnOrder }
+        >
+          Ordenar
+        </button>
+      </form>
+
       <br />
       {filters && filters.map((filter, key) => (
         <div
