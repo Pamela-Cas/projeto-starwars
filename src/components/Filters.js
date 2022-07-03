@@ -1,12 +1,23 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import ContextWars from '../context/ContextWars';
 
 export default function Filters() {
-  const [fieldType, setFieldType] = useState('population');
+  const fieldTypesDefault = [
+    'population',
+    'orbital_period',
+    'diameter',
+    'rotation_period',
+    'surface_water'];
+
+  const [fieldTypes, setFieldTypes] = useState(fieldTypesDefault);
+  const [fieldType, setFieldType] = useState(fieldTypesDefault[0]);
   const [operator, setOperator] = useState('maior que');
   const [value, setValue] = useState(0);
 
   const { handleSearch } = useContext(ContextWars);
+  useEffect(() => {
+    setFieldType(fieldTypes[0]);
+  }, [fieldTypes]);
 
   const handleSetFilterSearch = () => {
     const filter = {
@@ -14,6 +25,8 @@ export default function Filters() {
       operator,
       value,
     };
+    const newFieldTypes = fieldTypes.filter((field) => field !== filter.fieldType);
+    setFieldTypes(newFieldTypes);
     handleSearch(filter);
   };
 
@@ -27,11 +40,7 @@ export default function Filters() {
             value={ fieldType }
             onChange={ ({ target }) => setFieldType(target.value) }
           >
-            <option>population</option>
-            <option>orbital_period</option>
-            <option>diameter</option>
-            <option>rotation_period</option>
-            <option>surface_water</option>
+            {fieldTypes.map((field, key) => <option key={ key }>{field}</option>)}
           </select>
         </label>
         <label htmlFor="comparison-filter">
