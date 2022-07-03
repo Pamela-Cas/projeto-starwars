@@ -41,11 +41,22 @@ function ProviderWars({ children }) {
     setFilters([...filters, filter]);
   };
 
+  const handleRemoveAllFilters = () => {
+    setFilters([]);
+  };
+
+  const handleRemoveOnlyFilter = (filter) => {
+    const newFilters = filters.filter((item) => item.fieldType !== filter.fieldType);
+    setFilters(newFilters);
+  };
+
   const dataPlanet = {
     dataFiltered,
     busca,
     setBusca,
     handleSearch,
+    handleRemoveAllFilters,
+    handleRemoveOnlyFilter,
 
     filterByName: {
       name: busca,

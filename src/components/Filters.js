@@ -13,8 +13,11 @@ export default function Filters() {
   const [fieldType, setFieldType] = useState(fieldTypesDefault[0]);
   const [operator, setOperator] = useState('maior que');
   const [value, setValue] = useState(0);
+  const [filters, setFilters] = useState([]);
 
-  const { handleSearch } = useContext(ContextWars);
+  const { handleSearch,
+    handleRemoveAllFilters,
+    handleRemoveOnlyFilter } = useContext(ContextWars);
   useEffect(() => {
     setFieldType(fieldTypes[0]);
   }, [fieldTypes]);
@@ -27,7 +30,20 @@ export default function Filters() {
     };
     const newFieldTypes = fieldTypes.filter((field) => field !== filter.fieldType);
     setFieldTypes(newFieldTypes);
+    setFilters([...filters, filter]);
     handleSearch(filter);
+  };
+
+  const handleRemoveFilters = () => {
+    setFieldTypes(fieldTypesDefault);
+    handleRemoveAllFilters();
+  };
+
+  const handleRemoveSingleFilter = (filter) => {
+    const newFilters = filters.filter((item) => item.fieldType !== filter.fieldType);
+    setFieldTypes([...fieldTypes, filter.fieldType]);
+    setFilters(newFilters);
+    handleRemoveOnlyFilter(filter);
   };
 
   return (
@@ -69,7 +85,32 @@ export default function Filters() {
         >
           Filter
         </button>
+        <button
+          type="button"
+          data-testid="button-remove-filters"
+          onClick={ handleRemoveFilters }
+        >
+          Remover Filtros
+        </button>
       </form>
+      <br />
+      {filters && filters.map((filter, key) => (
+        <div
+          key={ key }
+          data-testid="filter"
+        >
+          <span style={ { marginRight: 5 } }>{filter.fieldType}</span>
+          <span style={ { marginRight: 5 } }>{filter.operator}</span>
+          <span style={ { marginRight: 5 } }>{filter.value}</span>
+          <button
+            type="button"
+            onClick={ () => handleRemoveSingleFilter(filter) }
+          >
+            Remover
+
+          </button>
+        </div>
+      )) }
     </div>
   );
 }
