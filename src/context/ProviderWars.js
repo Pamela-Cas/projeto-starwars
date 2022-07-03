@@ -6,10 +6,7 @@ function ProviderWars({ children }) {
   const [data, setData] = useState([]);
   const [dataFiltered, setDataFiltered] = useState([]);
   const [busca, setBusca] = useState('');
-  const [arrTypeFilter, setArrTypeFilter] = useState('population');
-  const [operator, setOperator] = useState('maior que');
-  const [xab, setXab] = useState([]);
-  const [value, setValue] = useState(0);
+  const [filters, setFilters] = useState([]);
 
   useEffect(() => {
     const getApiPlanets = async () => {
@@ -23,41 +20,31 @@ function ProviderWars({ children }) {
     getApiPlanets();
   }, []);
 
-  const handleSearch = () => {
-    const arrXab = {
-      arrTypeFilter,
-      operator,
-      value,
-    };
-    const auxXab = [arrXab, ...xab];
-    setXab(auxXab);
-    let newArr = [];
-    auxXab.forEach((item) => {
-      const results = data.filter((element) => {
+  useEffect(() => {
+    let newArr = data;
+    filters.forEach((item) => {
+      const results = newArr.filter((element) => {
         if (item.operator === 'igual a') {
-          return parseInt(element[item.arrTypeFilter], 10) === parseInt(item.value, 10);
+          return parseInt(element[item.fieldType], 10) === parseInt(item.value, 10);
         }
         if (item.operator === 'maior que') {
-          return parseInt(element[item.arrTypeFilter], 10) > parseInt(item.value, 10);
+          return parseInt(element[item.fieldType], 10) > parseInt(item.value, 10);
         }
-        return parseInt(element[item.arrTypeFilter], 10) < parseInt(item.value, 10);
+        return parseInt(element[item.fieldType], 10) < parseInt(item.value, 10);
       });
       newArr = results;
     });
-    setDataFiltered(results);
-    setXab(newArr);
+    setDataFiltered(newArr);
+  }, [filters, data]);
+
+  const handleSearch = (filter) => {
+    setFilters([...filters, filter]);
   };
 
   const dataPlanet = {
     dataFiltered,
     busca,
     setBusca,
-    setValue,
-    value,
-    setArrTypeFilter,
-    arrTypeFilter,
-    operator,
-    setOperator,
     handleSearch,
 
     filterByName: {

@@ -1,14 +1,21 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import ContextWars from '../context/ContextWars';
 
 export default function Filters() {
-  const {
-    setValue,
-    value,
-    setArrTypeFilter,
-    arrTypeFilter,
-    operator,
-    setOperator, handleSearch } = useContext(ContextWars);
+  const [fieldType, setFieldType] = useState('population');
+  const [operator, setOperator] = useState('maior que');
+  const [value, setValue] = useState(0);
+
+  const { handleSearch } = useContext(ContextWars);
+
+  const handleSetFilterSearch = () => {
+    const filter = {
+      fieldType,
+      operator,
+      value,
+    };
+    handleSearch(filter);
+  };
 
   return (
     <div>
@@ -17,8 +24,8 @@ export default function Filters() {
           Coluna
           <select
             data-testid="column-filter"
-            value={ arrTypeFilter }
-            onChange={ ({ target }) => setArrTypeFilter(target.value) }
+            value={ fieldType }
+            onChange={ ({ target }) => setFieldType(target.value) }
           >
             <option>population</option>
             <option>orbital_period</option>
@@ -49,7 +56,7 @@ export default function Filters() {
         <button
           type="button"
           data-testid="button-filter"
-          onClick={ handleSearch }
+          onClick={ handleSetFilterSearch }
         >
           Filter
         </button>
